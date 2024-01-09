@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\DmController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,4 +32,10 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/', [PostController::class, 'index'])->name('index');
 
+//DM
+Route::controller(DmController::class)->middleware(['auth'])->group(function(){
+    Route::get('/dm', 'dm')->name('dm');
+    Route::post('/add', 'add')->name('add');
+    Route::get('/result/ajax', 'getData');
+});
 require __DIR__.'/auth.php';
