@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
 use Illuminate\Http\Request;
 
+use Cloudinary;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 
 class DmController extends Controller
@@ -31,16 +33,21 @@ class DmController extends Controller
     
     public function add(Request $request)
 {
+    $uploadedFileUrl = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
+        //dd($uploadedFileUrl);
+        
     $user = Auth::user();
     $comment = $request->input('comment');
     Comment::create([
         'login_id' => $user->id,
         'name' => $user->name,
-        'comment' => $comment
+        'comment' => $comment,
+        'image' => $uploadedFileUrl
+
+        
     ]);
     return redirect()->route('dm');
 }
-
     public function getData()
 {
     $comments = Comment::orderBy('created_at', 'desc')->get();
@@ -48,4 +55,3 @@ class DmController extends Controller
     return response()->json($json);
 }
 }
-

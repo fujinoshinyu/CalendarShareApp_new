@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\DmController;
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,12 +31,26 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+//HOME
 Route::get('/', [PostController::class, 'index'])->name('index');
 
 //DM
+
 Route::controller(DmController::class)->middleware(['auth'])->group(function(){
     Route::get('/dm', 'dm')->name('dm');
     Route::post('/add', 'add')->name('add');
     Route::get('/result/ajax', 'getData');
+    //画像
+    Route::get('/uplopad', 'uplopad');
+    Route::post('/upload', 'store')->name('store');
+});
+
+//calendar
+Route::controller(EventController::class)->middleware(['auth'])->group(function(){
+    Route::get('/calendar', 'show')->name('show');
+    Route::post('/calendar/create','create')->name("create");
+    Route::post('/calendar/get', 'get')->name("get");
+    Route::put('/calendar/update','update')->name("update");
+    Route::delete('/calendar/delete', 'delete')->name("delete");
 });
 require __DIR__.'/auth.php';
