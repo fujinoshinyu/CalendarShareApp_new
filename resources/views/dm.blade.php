@@ -4,23 +4,25 @@
             {{ __('DM') }}
         </h2>
     </x-slot>
+    
 <div class="chat-container row justify-content-center">
     <div class="chat-area">
         <div class="card">
             <div class="card-header">Comment</div>
             <div class="card-body chat-card">
-                @foreach ($comments as $item)
-                @include('components.comment', ['item' => $item])
-                @endforeach
+                <div id="comment-data"></div>
             </div>
         </div>
     </div>
 </div>
 
-<form method="POST" action="{{route('add')}}">
+<form method="POST" action="{{route('add')}}" enctype="multipart/form-data">
     @csrf
     <div class="comment-container row justify-content-center">
         <div class="input-group comment-area">
+            
+            <input type="file" name="image">
+            
             <textarea class="form-control" id="comment" name="comment" placeholder="push massage (shift + Enter)"
                 aria-label="With textarea"
                 onkeydown="if(event.shiftKey&&event.keyCode==13){document.getElementById('submit').click();return false};"></textarea>
@@ -28,6 +30,7 @@
         </div>
     </div>
 </form>
+
 </x-app-layout>
 @section('js')
 <script src="{{ asset('js/comment.js') }}"></script>
